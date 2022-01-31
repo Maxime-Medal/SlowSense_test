@@ -28,12 +28,13 @@ const Rect = ({ rect }) => {
 
 const Circle = ({ circ }) => {
   const { PositionX, PositionY, Width } = circ;
+  const radius = Width / 2;
 
   return (
     <circle
-      cx={PositionX}
-      cy={PositionY}
-      r={Width / 2}
+      cx={PositionX + radius}
+      cy={PositionY + radius}
+      r={radius}
       stroke="#000"
       fill="#FFF"
     />
@@ -41,20 +42,26 @@ const Circle = ({ circ }) => {
 };
 
 function App() {
-  const rectangles = shapes.filter((rect) => rect.FormType === "Rectangle");
-  const circles = shapes.filter((circ) => circ.FormType === "Circle");
+  // const rectangles = shapes.filter((rect) => rect.FormType === "Rectangle");
+  // const circles = shapes.filter((circ) => circ.FormType === "Circle");
+
+  const formes = shapes
+    .sort((s1, s2) => parseInt(s1.Order) - parseInt(s2.Order))
+    .map((el) => {
+      if (el.FormType === "Rectangle") {
+        return <Rect rect={el} />;
+      }
+      if (el.FormType === "Circle") {
+        return <Circle circ={el} />;
+      }
+    });
 
   return (
     <>
       <p>Hello Slow Sense!</p>
 
-      <svg viewBox="0 0 600 800" xmlns="http://www.w3.org/2000/svg">
-        {rectangles.map((r) => (
-          <Rect rect={r} />
-        ))}
-        {circles.map((c) => (
-          <Circle circ={c} />
-        ))}
+      <svg width="600" height="800" xmlns="http://www.w3.org/2000/svg">
+        {formes}
       </svg>
     </>
   );
